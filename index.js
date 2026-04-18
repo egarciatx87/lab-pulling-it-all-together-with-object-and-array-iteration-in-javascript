@@ -114,3 +114,99 @@ function gameObject() {
         },
     };
 }
+
+function numPointsScored(playerName) {
+  const data = gameObject();
+  // check if the name exists as a key in either object
+  const homePlayer = data.home.players[playerName];
+  const awayPlayer = data.away.players[playerName];
+
+  if (homePlayer) {
+    return homePlayer.points;
+  } else if (awayPlayer) {
+    return awayPlayer.points;
+  } else {
+    return 0;
+  }
+}
+
+function shoeSize(playerName) {
+  const data = gameObject();
+  const homePlayer = data.home.players[playerName];
+  const awayPlayer = data.away.players[playerName];
+
+  if (homePlayer) {
+    return homePlayer.shoe;
+  } else if (awayPlayer) {
+    return awayPlayer.shoe;
+  } else {
+    return 0;
+  }
+}
+
+function teamColors(teamName) {
+  const data = gameObject();
+  const teams = [data.home, data.away];
+
+  // .find() looks at each team object one by one
+  const foundTeam = teams.find((team) => {
+    if (team.teamName === teamName) {
+      return true; // Stop here! We found it.
+    }
+  });
+
+  if (foundTeam) {
+    return foundTeam.colors;
+  } else {
+    return [];
+  }
+}
+
+function teamNames() {
+  const data = gameObject();
+  const teams = [data.home, data.away];
+
+  // .map() takes the whole team object and "extracts" just the name string
+  return teams.map((team) => {
+    return team.teamName;
+  });
+}
+
+function playerNumbers(teamName) {
+  const data = gameObject();
+  let selectedTeam;
+
+  if (data.home.teamName === teamName) {
+    selectedTeam = data.home.players;
+  } else {
+    selectedTeam = data.away.players;
+  }
+
+  // Object.values() turns the stats into an array
+  // .map() then goes through each one and returns just the number
+  const playerStatsArray = Object.values(selectedTeam);
+  
+  return playerStatsArray.map((stats) => {
+    return stats.number;
+  });
+}
+
+function bigShoeRebounds() {
+  const data = gameObject();
+  
+  // Combine all player stats into one big array
+  const homeStats = Object.values(data.home.players);
+  const awayStats = Object.values(data.away.players);
+  const allPlayers = homeStats.concat(awayStats);
+
+  // .reduce() compares players to find the "winner"
+  const winner = allPlayers.reduce((maxPlayer, currentPlayer) => {
+    if (currentPlayer.shoe > maxPlayer.shoe) {
+      return currentPlayer; // This person is the new "max"
+    } else {
+      return maxPlayer; // Keep the old "max"
+    }
+  });
+
+  return winner.rebounds;
+}
